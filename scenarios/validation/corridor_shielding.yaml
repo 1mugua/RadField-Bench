@@ -1,0 +1,67 @@
+schema_version: "0.1"
+scenario_id: "validation_corridor_shielding_v0"
+split: "validation"
+seed: 31
+time_step_s: 0.25
+metadata:
+  description: "Validation corridor with an offset shielded source"
+  authoring_status: "reference"
+
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 12.0
+    y_min: 0.0
+    y_max: 5.0
+  obstacles:
+    - id: "cross_wall_low"
+      x_min: 3.5
+      x_max: 3.8
+      y_min: 0.0
+      y_max: 3.2
+      material: "concrete"
+    - id: "cross_wall_high"
+      x_min: 7.5
+      x_max: 7.8
+      y_min: 1.8
+      y_max: 5.0
+      material: "concrete"
+
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.45
+
+sources:
+  - id: "source_corridor"
+    x: 10.0
+    y: 0.8
+    reference_cps_at_1m: 220.0
+    isotope: "synthetic_gamma"
+
+detector:
+  integration_time_s: 0.5
+  background_cps: 2.5
+  efficiency: 0.9
+  min_distance_m: 0.25
+  directional_exponent: 0.0
+
+robot:
+  start:
+    x: 1.0
+    y: 4.2
+    yaw: -1.57
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+
+task:
+  type: "safe_exploration"
+  max_steps: 520
+  dose_budget: 950.0
+  goal:
+    x: 11.0
+    y: 4.2
+  goal_tolerance_m: 0.5
+  localization_tolerance_m: 1.0
+

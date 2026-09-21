@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="RadField-Bench Architecture">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Scenario Spec&#xa;YAML + seed + split" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="World &amp; Materials&#xa;SDF / mesh / attenuation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="60" y="230" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="Radiation Field Engine&#xa;online lightweight model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="370" y="150" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="Detector Model&#xa;counts + noise + delay + alarm" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="700" y="150" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="Robot + ROS 2 / Python API&#xa;UGV, sensors, actions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="150" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="Task Suite&#xa;Detection | Mapping | Localization&#xa;Safe Exploration | Inspection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="370" y="360" width="300" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="Episode Data&#xa;pose | counts | actions | exposure&#xa;maps | metadata" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="760" y="350" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="Evaluator&#xa;accuracy | dose | time | energy&#xa;collision | calibration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="350" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="High-fidelity Calibration&#xa;OpenMC / Geant4 / NIST XCOM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontFamily=Arial;fontSize=14;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="510" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="Real-data Validation&#xa;Manchester robot datasets&#xa;safe lab calibration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontFamily=Arial;fontSize=14;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="510" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="Baselines &amp; Leaderboard&#xa;random | frontier | Bayesian | GP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="760" y="510" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="Hidden Test Set&#xa;IID + OOD + sim2real" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontFamily=Arial;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="510" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" edge="1" parent="1" source="2" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" edge="1" parent="1" source="3" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" edge="1" parent="1" source="4" target="5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" edge="1" parent="1" source="5" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" edge="1" parent="1" source="6" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" edge="1" parent="1" source="7" target="8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" edge="1" parent="1" source="8" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;" edge="1" parent="1" source="10" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;" edge="1" parent="1" source="11" target="5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" edge="1" parent="1" source="9" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;" edge="1" parent="1" source="13" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
