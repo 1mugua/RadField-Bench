@@ -149,6 +149,22 @@ def load_scenario(path: str | Path) -> Scenario:
 
     robot_raw = _require(raw, "robot", "scenario")
     start_raw = _require(robot_raw, "start", "robot")
+    pose_mode = str(robot_raw.get("pose_mode", "oracle"))
+    if pose_mode not in ("oracle", "noisy_odometry"):
+        raise ScenarioError(
+            f"robot.pose_mode must be 'oracle' or 'noisy_odometry', got {pose_mode!r}"
+        )
+    noise_raw = robot_raw.get("odometry_noise", {}) or {}
+    translation_noise_std_m = _positive(
+        noise_raw.get("translation_std_m", 0.0),
+        "robot.odometry_noise.translation_std_m",
+        allow_zero=True,
+    )
+    rotation_noise_std_rad = _positive(
+        noise_raw.get("rotation_std_rad", 0.0),
+        "robot.odometry_noise.rotation_std_rad",
+        allow_zero=True,
+    )
     robot = RobotConfig(
         start=Pose2D(
             x=float(_require(start_raw, "x", "robot.start")),
@@ -163,6 +179,9 @@ def load_scenario(path: str | Path) -> Scenario:
             _require(robot_raw, "max_angular_velocity_rps", "robot"),
             "robot.max_angular_velocity_rps",
         ),
+        pose_mode=pose_mode,
+        translation_noise_std_m=translation_noise_std_m,
+        rotation_noise_std_rad=rotation_noise_std_rad,
     )
     if not world.contains(robot.start.x, robot.start.y):
         raise ScenarioError("Robot start lies outside the world")

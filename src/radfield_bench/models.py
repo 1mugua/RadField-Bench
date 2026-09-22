@@ -75,6 +75,9 @@ class RobotConfig:
     start: Pose2D
     max_linear_velocity_mps: float
     max_angular_velocity_rps: float
+    pose_mode: str = "oracle"
+    translation_noise_std_m: float = 0.0
+    rotation_noise_std_rad: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -112,11 +115,14 @@ class Action:
 
 @dataclass(frozen=True)
 class Observation:
+    schema_version: str
     step: int
     time_s: float
-    pose: Pose2D
+    pose_estimate: Pose2D
+    pose_covariance: tuple[float, float, float]
     counts: int
     count_rate_cps: float
+    integration_time_s: float
     cumulative_exposure: float
     remaining_exposure_budget: float
 
@@ -124,6 +130,7 @@ class Observation:
 @dataclass
 class EpisodeState:
     pose: Pose2D
+    estimated_pose: Pose2D | None = None
     step: int = 0
     time_s: float = 0.0
     cumulative_exposure: float = 0.0

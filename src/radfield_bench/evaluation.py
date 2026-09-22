@@ -24,7 +24,10 @@ def evaluate_episode(
             )
 
     visited_cells = {
-        (round(float(row["pose"]["x"]) * 2.0), round(float(row["pose"]["y"]) * 2.0))
+        (
+            round(float(row["real_pose"]["x"]) * 2.0),
+            round(float(row["real_pose"]["y"]) * 2.0),
+        )
         for row in history
     }
     world_area = (scenario.world.x_max - scenario.world.x_min) * (

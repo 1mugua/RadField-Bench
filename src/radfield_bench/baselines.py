@@ -42,7 +42,7 @@ class RandomWalkAgent(BaselineAgent):
 
     def act(self, observation: Observation) -> Action:
         self.measurements.append(
-            _Measurement(observation.pose.x, observation.pose.y, observation.count_rate_cps)
+            _Measurement(observation.pose_estimate.x, observation.pose_estimate.y, observation.count_rate_cps)
         )
         angular = float(self.rng.normal(0.0, 0.55))
         return Action(self.scenario.robot.max_linear_velocity_mps * 0.65, angular)
@@ -62,19 +62,19 @@ class LawnmowerAgent(BaselineAgent):
 
     def act(self, observation: Observation) -> Action:
         self.measurements.append(
-            _Measurement(observation.pose.x, observation.pose.y, observation.count_rate_cps)
+            _Measurement(observation.pose_estimate.x, observation.pose_estimate.y, observation.count_rate_cps)
         )
         if not self.waypoints:
             return Action(0.0, 0.0)
         while self.index < len(self.waypoints) - 1:
             target_x, target_y = self.waypoints[self.index]
-            if (target_x - observation.pose.x) ** 2 + (target_y - observation.pose.y) ** 2 < 0.18**2:
+            if (target_x - observation.pose_estimate.x) ** 2 + (target_y - observation.pose_estimate.y) ** 2 < 0.18**2:
                 self.index += 1
             else:
                 break
         target_x, target_y = self.waypoints[self.index]
-        target_yaw = atan2(target_y - observation.pose.y, target_x - observation.pose.x)
-        error = wrap_angle(target_yaw - observation.pose.yaw)
+        target_yaw = atan2(target_y - observation.pose_estimate.y, target_x - observation.pose_estimate.x)
+        error = wrap_angle(target_yaw - observation.pose_estimate.yaw)
         angular = float(
             np.clip(
                 2.0 * error,
@@ -102,13 +102,13 @@ class BayesianGridAgent(BaselineAgent):
 
     def act(self, observation: Observation) -> Action:
         self.measurements.append(
-            _Measurement(observation.pose.x, observation.pose.y, observation.count_rate_cps)
+            _Measurement(observation.pose_estimate.x, observation.pose_estimate.y, observation.count_rate_cps)
         )
         counts = float(observation.counts)
         dt = self.scenario.detector.integration_time_s
         for index, (x, y) in enumerate(self.grid):
             distance = max(
-                ((x - observation.pose.x) ** 2 + (y - observation.pose.y) ** 2) ** 0.5,
+                ((x - observation.pose_estimate.x) ** 2 + (y - observation.pose_estimate.y) ** 2) ** 0.5,
                 self.scenario.detector.min_distance_m,
             )
             expected_cps = self.scenario.detector.background_cps + (
@@ -120,8 +120,8 @@ class BayesianGridAgent(BaselineAgent):
             self.log_posterior[index] += counts * np.log(expected_counts) - expected_counts
         self.log_posterior -= np.max(self.log_posterior)
         target_x, target_y = self.grid[int(np.argmax(self.log_posterior))]
-        target_yaw = atan2(target_y - observation.pose.y, target_x - observation.pose.x)
-        error = wrap_angle(target_yaw - observation.pose.yaw)
+        target_yaw = atan2(target_y - observation.pose_estimate.y, target_x - observation.pose_estimate.x)
+        error = wrap_angle(target_yaw - observation.pose_estimate.yaw)
         angular = float(
             np.clip(
                 2.0 * error,

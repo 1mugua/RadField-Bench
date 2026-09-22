@@ -12,7 +12,7 @@ M4 ROS 2/Gazebo 集成      尚未开始
 M5 论文与公开发布         尚未开始
 ```
 
-目前已经通过 `9 passed`，包含场景解析、辐射衰减、材料遮挡、随机探测器、机器人闭环、基线和结果输出。当前实现记录在 [IMPLEMENTATION_STATUS.md](D:/2--Study/14--RobotBench/docs/IMPLEMENTATION_STATUS.md)。
+目前已经通过 `9 passed`，包含场景解析、辐射衰减、材料遮挡、随机探测器、机器人闭环、基线和结果输出。当前实现记录在 [IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)。
 
 **一、下一步先冻结五个关键决策**
 

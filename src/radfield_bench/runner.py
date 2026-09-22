@@ -82,7 +82,7 @@ def _write_trajectory(path: Path, history: list[dict[str, object]]) -> None:
         writer = csv.DictWriter(stream, fieldnames=fieldnames)
         writer.writeheader()
         for row in history:
-            pose = row["pose"]
+            pose = row["pose_estimate"]
             writer.writerow(
                 {
                     "step": row["step"],

@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import asdict
-from math import hypot
+from math import hypot, pi
 
 import numpy as np
 
 from .detector import CountRateDetector
 from .models import Action, EpisodeState, Observation, Pose2D, Scenario
 from .physics import GammaField
+
+
+def _wrap_angle(angle: float) -> float:
+    return (angle + pi) % (2.0 * pi) - pi
 
 
 class RadFieldEnv:
@@ -18,25 +22,45 @@ class RadFieldEnv:
         self.field = GammaField(scenario)
         self.rng = np.random.default_rng(scenario.seed)
         self.detector = CountRateDetector(scenario.detector, self.field, self.rng)
-        self.state = EpisodeState(pose=scenario.robot.start)
+        self.state = EpisodeState(
+            pose=scenario.robot.start, estimated_pose=scenario.robot.start
+        )
+        self._last_real_pose = scenario.robot.start
         self.history: list[dict[str, object]] = []
 
     def reset(self, seed: int | None = None) -> Observation:
         actual_seed = self.scenario.seed if seed is None else seed
         self.rng = np.random.default_rng(actual_seed)
         self.detector = CountRateDetector(self.scenario.detector, self.field, self.rng)
-        self.state = EpisodeState(pose=self.scenario.robot.start)
+        self.state = EpisodeState(
+            pose=self.scenario.robot.start, estimated_pose=self.scenario.robot.start
+        )
+        self._last_real_pose = self.scenario.robot.start
         self.history = []
         return self._observe()
 
     def _observe(self) -> Observation:
         counts, measured_cps, expected_cps = self.detector.sample(self.state.pose)
+        if self.scenario.robot.pose_mode == "noisy_odometry":
+            self._update_odometry_estimate()
+            pose_estimate = self.state.estimated_pose
+            pose_covariance = (
+                self.scenario.robot.translation_noise_std_m ** 2,
+                self.scenario.robot.translation_noise_std_m ** 2,
+                self.scenario.robot.rotation_noise_std_rad ** 2,
+            )
+        else:
+            pose_estimate = self.state.pose
+            pose_covariance = (0.0, 0.0, 0.0)
         observation = Observation(
+            schema_version="0.1",
             step=self.state.step,
             time_s=self.state.time_s,
-            pose=self.state.pose,
+            pose_estimate=pose_estimate,
+            pose_covariance=pose_covariance,
             counts=counts,
             count_rate_cps=measured_cps,
+            integration_time_s=self.scenario.detector.integration_time_s,
             cumulative_exposure=self.state.cumulative_exposure,
             remaining_exposure_budget=max(
                 0.0, self.scenario.task.dose_budget - self.state.cumulative_exposure
@@ -48,11 +72,36 @@ class RadFieldEnv:
         self.history.append(
             {
                 **asdict(observation),
-                "pose": asdict(observation.pose),
+                "pose_estimate": asdict(pose_estimate),
+                "pose_covariance": list(pose_covariance),
+                "real_pose": asdict(self.state.pose),
                 "expected_count_rate_cps": expected_cps,
             }
         )
         return observation
+
+    def _update_odometry_estimate(self) -> None:
+        real = self.state.pose
+        previous_real = self._last_real_pose
+        dx = real.x - previous_real.x
+        dy = real.y - previous_real.y
+        dyaw = _wrap_angle(real.yaw - previous_real.yaw)
+        noisy_dx = dx + float(
+            self.rng.normal(0.0, self.scenario.robot.translation_noise_std_m)
+        )
+        noisy_dy = dy + float(
+            self.rng.normal(0.0, self.scenario.robot.translation_noise_std_m)
+        )
+        noisy_dyaw = dyaw + float(
+            self.rng.normal(0.0, self.scenario.robot.rotation_noise_std_rad)
+        )
+        estimate = self.state.estimated_pose
+        self.state.estimated_pose = Pose2D(
+            x=estimate.x + noisy_dx,
+            y=estimate.y + noisy_dy,
+            yaw=_wrap_angle(estimate.yaw + noisy_dyaw),
+        )
+        self._last_real_pose = real
 
     def _collides(self, pose: Pose2D) -> bool:
         if not self.scenario.world.contains(pose.x, pose.y):
