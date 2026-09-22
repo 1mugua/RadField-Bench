@@ -1,0 +1,136 @@
+schema_version: '0.1'
+scenario_id: waste_store_hard_001
+split: reference
+seed: 10121
+time_step_s: 0.25
+metadata:
+  domain: waste_management
+  family: waste_store
+  difficulty: hard
+  instance: 1
+  description: Patrol a waste store with drum arrays under a tight exposure budget.
+  authoring_status: generated
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 12.0
+    y_min: 0.0
+    y_max: 10.0
+  obstacles:
+  - id: drum_0_1
+    x_min: 1.0
+    x_max: 2.0
+    y_min: 3.9
+    y_max: 4.9
+    material: steel
+  - id: drum_0_2
+    x_min: 1.0
+    x_max: 2.0
+    y_min: 6.8
+    y_max: 7.8
+    material: steel
+  - id: drum_1_0
+    x_min: 3.1
+    x_max: 4.1
+    y_min: 1.0
+    y_max: 2.0
+    material: steel
+  - id: drum_1_1
+    x_min: 3.1
+    x_max: 4.1
+    y_min: 3.9
+    y_max: 4.9
+    material: steel
+  - id: drum_2_0
+    x_min: 5.2
+    x_max: 6.2
+    y_min: 1.0
+    y_max: 2.0
+    material: steel
+  - id: drum_2_2
+    x_min: 5.2
+    x_max: 6.2
+    y_min: 6.8
+    y_max: 7.8
+    material: steel
+  - id: drum_3_1
+    x_min: 7.300000000000001
+    x_max: 8.3
+    y_min: 3.9
+    y_max: 4.9
+    material: steel
+  - id: drum_3_2
+    x_min: 7.300000000000001
+    x_max: 8.3
+    y_min: 6.8
+    y_max: 7.8
+    material: steel
+  - id: drum_4_0
+    x_min: 9.4
+    x_max: 10.4
+    y_min: 1.0
+    y_max: 2.0
+    material: steel
+  - id: drum_4_1
+    x_min: 9.4
+    x_max: 10.4
+    y_min: 3.9
+    y_max: 4.9
+    material: steel
+  - id: shield_wall
+    x_min: 6.0
+    x_max: 6.4
+    y_min: 0.0
+    y_max: 5.5
+    material: concrete
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.4
+  steel:
+    linear_attenuation_per_m: 1.2
+sources:
+- id: source_01
+  x: 8.30117331349232
+  y: 8.922900761286009
+  reference_cps_at_1m: 800.0
+  isotope: synthetic_gamma
+- id: source_02
+  x: 6.347878562434712
+  y: 6.022552725646357
+  reference_cps_at_1m: 450.0
+  isotope: synthetic_gamma
+- id: source_03
+  x: 9.751753541212242
+  y: 6.732626792050076
+  reference_cps_at_1m: 300.0
+  isotope: synthetic_gamma
+detector:
+  integration_time_s: 0.5
+  background_cps: 70.0
+  efficiency: 0.9
+  max_cps: 8000.0
+  dead_time_s: 2.0e-05
+  min_distance_m: 0.25
+  directional_exponent: 0.0
+robot:
+  start:
+    x: 1.0
+    y: 1.0
+    yaw: 0.0
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+  pose_mode: noisy_odometry
+  odometry_noise:
+    translation_std_m: 0.03
+    rotation_std_rad: 0.03
+task:
+  type: safe_exploration
+  max_steps: 560
+  dose_budget: 600.0
+  goal:
+    x: 11.0
+    y: 9.0
+  goal_tolerance_m: 0.5
+  localization_tolerance_m: 1.0

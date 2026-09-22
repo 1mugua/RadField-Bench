@@ -1,0 +1,97 @@
+schema_version: '0.1'
+scenario_id: decommissioning_site_hard_001
+split: reference
+seed: 10139
+time_step_s: 0.25
+metadata:
+  domain: waste_management
+  family: decommissioning_site
+  difficulty: hard
+  instance: 1
+  description: Survey a decommissioning site with scattered debris and residual hot
+    spots.
+  authoring_status: generated
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 16.0
+    y_min: 0.0
+    y_max: 10.0
+  obstacles:
+  - id: debris_0
+    x_min: 3.6675191833884715
+    x_max: 5.208292115923886
+    y_min: 4.191451719501558
+    y_max: 5.26057934993373
+    material: concrete
+  - id: debris_1
+    x_min: 5.937303162410338
+    x_max: 7.112483750927307
+    y_min: 7.405480881140936
+    y_max: 8.596942111085701
+    material: concrete
+  - id: debris_2
+    x_min: 11.333616897944706
+    x_max: 12.868951241209498
+    y_min: 6.093255085670219
+    y_max: 7.182814628876526
+    material: concrete
+  - id: debris_3
+    x_min: 7.878610321095707
+    x_max: 9.633375716978273
+    y_min: 4.2188858112739265
+    y_max: 5.5678790099129065
+    material: concrete
+  - id: debris_4
+    x_min: 5.093910682289539
+    x_max: 5.932681323443628
+    y_min: 6.477185290894683
+    y_max: 7.472104992520052
+    material: concrete
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.4
+  steel:
+    linear_attenuation_per_m: 1.2
+sources:
+- id: source_01
+  x: 13.42149947718235
+  y: 8.132777967607524
+  reference_cps_at_1m: 420.0
+  isotope: synthetic_gamma
+- id: source_02
+  x: 10.941156873298226
+  y: 4.299863196762728
+  reference_cps_at_1m: 260.0
+  isotope: synthetic_gamma
+- id: source_03
+  x: 3.5355881892835246
+  y: 3.0006572231224737
+  reference_cps_at_1m: 120.0
+  isotope: synthetic_gamma
+detector:
+  integration_time_s: 0.5
+  background_cps: 70.0
+  efficiency: 0.9
+  max_cps: 8000.0
+  dead_time_s: 2.0e-05
+  min_distance_m: 0.25
+  directional_exponent: 0.0
+robot:
+  start:
+    x: 1.0
+    y: 1.0
+    yaw: 0.0
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+  pose_mode: noisy_odometry
+  odometry_noise:
+    translation_std_m: 0.03
+    rotation_std_rad: 0.03
+task:
+  type: source_localization
+  max_steps: 540
+  dose_budget: 750.0
+  localization_tolerance_m: 1.0

@@ -1,0 +1,68 @@
+schema_version: '0.1'
+scenario_id: cargo_bay_simple_001
+split: reference
+seed: 10091
+time_step_s: 0.25
+metadata:
+  domain: security_screening
+  family: cargo_bay
+  difficulty: simple
+  instance: 1
+  description: Scan cargo in a bay for shielded smuggled sources.
+  authoring_status: generated
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 14.0
+    y_min: 0.0
+    y_max: 9.0
+  obstacles:
+  - id: container_1
+    x_min: 2.0
+    x_max: 4.5
+    y_min: 1.0
+    y_max: 2.6
+    material: steel
+  - id: container_2
+    x_min: 8.0
+    x_max: 10.5
+    y_min: 5.5
+    y_max: 7.1
+    material: steel
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.4
+  steel:
+    linear_attenuation_per_m: 1.2
+sources:
+- id: source_01
+  x: 4.657394132719254
+  y: 1.656844402213951
+  reference_cps_at_1m: 130.0
+  isotope: synthetic_gamma
+detector:
+  integration_time_s: 0.4
+  background_cps: 5.0
+  efficiency: 0.8
+  max_cps: 5000.0
+  dead_time_s: 2.0e-05
+  min_distance_m: 0.25
+  directional_exponent: 1.0
+robot:
+  start:
+    x: 1.0
+    y: 1.0
+    yaw: 0.0
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+  pose_mode: noisy_odometry
+  odometry_noise:
+    translation_std_m: 0.01
+    rotation_std_rad: 0.01
+task:
+  type: source_localization
+  max_steps: 320
+  dose_budget: 900.0
+  localization_tolerance_m: 1.0

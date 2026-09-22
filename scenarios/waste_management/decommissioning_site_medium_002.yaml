@@ -1,0 +1,92 @@
+schema_version: '0.1'
+scenario_id: decommissioning_site_medium_002
+split: reference
+seed: 10137
+time_step_s: 0.25
+metadata:
+  domain: waste_management
+  family: decommissioning_site
+  difficulty: medium
+  instance: 2
+  description: Survey a decommissioning site with scattered debris and residual hot
+    spots.
+  authoring_status: generated
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 16.0
+    y_min: 0.0
+    y_max: 10.0
+  obstacles:
+  - id: debris_0
+    x_min: 7.186912232082515
+    x_max: 8.174016656155297
+    y_min: 5.150101614096752
+    y_max: 6.03129070342529
+    material: concrete
+  - id: debris_1
+    x_min: 6.84769690753037
+    x_max: 7.7403037246267745
+    y_min: 5.034841511496763
+    y_max: 5.923573068603352
+    material: concrete
+  - id: debris_2
+    x_min: 4.450371625827151
+    x_max: 6.021031129566687
+    y_min: 7.648564667330129
+    y_max: 8.975985434105798
+    material: concrete
+  - id: debris_3
+    x_min: 2.2476330787854044
+    x_max: 3.229719206244125
+    y_min: 2.1890766664231305
+    y_max: 3.3133886842023994
+    material: concrete
+  - id: debris_4
+    x_min: 4.087778960448544
+    x_max: 5.126990005653987
+    y_min: 5.618105700931477
+    y_max: 6.36974226538604
+    material: concrete
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.4
+  steel:
+    linear_attenuation_per_m: 1.2
+sources:
+- id: source_01
+  x: 3.573014072415919
+  y: 7.480838240644399
+  reference_cps_at_1m: 300.0
+  isotope: synthetic_gamma
+- id: source_02
+  x: 9.49952812668943
+  y: 2.2197984595094518
+  reference_cps_at_1m: 150.0
+  isotope: synthetic_gamma
+detector:
+  integration_time_s: 0.5
+  background_cps: 50.0
+  efficiency: 0.9
+  max_cps: 8000.0
+  dead_time_s: 2.0e-05
+  min_distance_m: 0.25
+  directional_exponent: 0.0
+robot:
+  start:
+    x: 1.0
+    y: 1.0
+    yaw: 0.0
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+  pose_mode: noisy_odometry
+  odometry_noise:
+    translation_std_m: 0.02
+    rotation_std_rad: 0.02
+task:
+  type: source_localization
+  max_steps: 440
+  dose_budget: 850.0
+  localization_tolerance_m: 1.0

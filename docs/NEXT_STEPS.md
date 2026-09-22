@@ -24,8 +24,9 @@
 - 2D 机器人闭环环境；
 - random walk、lawnmower、Bayesian grid 三个基线；
 - JSON/CSV 结果产物和评测器；
-- 三个参考场景；
-- 9 个自动化测试；
+- 业务领域场景库 v0.1：4 领域 × 2 场景族 × 3 难度 × 2 实例 = 48 个生成场景（另保留 3 个参考场景）；
+- `radfield_bench.scenariogen` 场景生成器（确定性、可复现）；
+- 22 个自动化测试（含生成器确定性/合法性测试）；
 - Python 3.10/3.12 CI 配置。
 
 当前环境尚未提供：
@@ -171,41 +172,43 @@
 - [ ] 漏检率和有效覆盖率。
 - [ ] 任务顺序、能耗和累计暴露指标。
 
-## 6. 阶段 M2.1：场景生成与数据切分
+## 6. 阶段 M2.1：业务领域场景库
 
-目标：让测试结果反映泛化能力，而不是记忆手写地图。
+目标：场景按真实核辐射业务领域组织，而非机器学习式 train/validation/test 切分。
+每个业务领域包含若干场景族，族内按 简单 → 中等 → 困难 分档，每档多个实例
+（不同 seed），以实例均值/方差给出统计意义。
 
-### 6.1 场景生成轴
+### 6.1 业务领域（v0.1 首批 4 个）
 
-- [ ] 几何：open room、corridor、warehouse、partitioned room。
-- [ ] 源：single、two-source、weak/strong mixed source。
-- [ ] 材料：none、concrete、steel、mixed shielding。
-- [ ] 背景：low、medium、spatially varying、temporally varying。
-- [ ] 传感器：isotropic、directional、high-noise、delayed。
-- [ ] 地图：known、partial、unknown。
-- [ ] 运动：oracle、noisy odometry、action noise。
+- [x] `npp_patrol` 核电厂厂区巡检：厂房管道走廊、泵房隔间，背景较高、设备密集。
+- [x] `source_search` 放射源搜寻：开放区域丢源、屏蔽体藏源（柱/柜后、柜内）。
+- [x] `security_screening` 公众场所安保：车站大厅、货运舱，弱源 + 时间压力，方向性探测器。
+- [x] `waste_management` 废物处置：废物库桶阵（高剂量 + 紧预算）、退役现场残骸热点。
+- [ ] 后续可扩：核事故应急响应、科研/医疗同位素场所、跨领域组合场景。
 
-### 6.2 Split
+### 6.2 场景族与难度
 
-- [ ] `train`：公开场景和真值。
-- [ ] `validation`：公开场景，部分参数隐藏。
-- [ ] `test-iid`：同分布隐藏 seed。
-- [ ] `test-ood`：新布局、材料、源数量或噪声。
-- [ ] `test-sim2real`：由真实数据统计校准的传感器分布。
+- [x] 首批 8 个场景族（每领域 2 族），族内布局参数化生成。
+- [x] 难度轴：源数量/强度、遮挡材料与数量、本底、噪声档、预算/步数压力。
+- [x] 族内多实例：每难度 2 个实例（不同 seed），共 48 个生成场景。
+- [ ] 增加中等档实例数（≥3），支撑置信区间。
+- [ ] 为每个场景族补充“业务说明”与“成功判据”注释（面向论文附录）。
 
-### 6.3 目标规模
+### 6.3 生成器与确定性
 
-首批至少 12 个版本化场景：
+- [x] 新增 `radfield_bench.scenariogen`：`domains.py`（模板）+ `generator.py`（确定性生成）。
+- [x] 固定 seed：同 seed 生成完全一致的 YAML；布局与运行时共用 seed。
+- [x] 场景命名 `{family}_{difficulty}_{instance:03d}`，元数据含 domain/family/difficulty/instance。
+- [x] 生成器测试：确定性、可加载、难度覆盖、源布局合法性、round-trip。
+- [x] 场景清单与 hash（沿用 scenario_sha256，manifest 输出）。
+- [ ] 新增 `scenariogen` CLI 入口（`radfield generate-scenarios`）。
 
-- 6 个 train；
-- 3 个 validation；
-- 2 个 test-iid manifest；
-- 1 个 test-ood manifest。
+### 6.4 真值与防作弊（benchmark 口径）
 
-- [ ] 新增 scenario template generator。
-- [ ] 新增 fixed-seed registry。
-- [ ] 新增场景清单和 hash。
-- [ ] 禁止通过文件名泄露测试源参数。
+- 公开场景真值随仓库发布（可本地复现、可审计）。
+- 隐藏场景（仅清单 + 哈希，真值由评测服务持有）作为受控评测选项，按业务领域/难度
+  抽样生成，不按 train/test 语义命名，避免“文件内文件名泄露源参数”。
+- [ ] 受控评测服务（隐藏真值场景分发 + 提交结果验证）暂列 v0.2。
 
 ## 7. 阶段 M2.2：批量评测和基线报告
 
@@ -215,7 +218,7 @@
 - [ ] 新增 baseline/scenario/seed 矩阵配置。
 - [ ] 新增 `results.csv` 和 `results.json`。
 - [ ] 新增均值、标准差、置信区间。
-- [ ] 新增按任务、场景族和 split 的聚合。
+- [ ] 新增按任务、业务领域、难度和实例的聚合（含实例均值与标准差）。
 - [ ] 输出 Pareto 图数据：accuracy、exposure、time、energy。
 - [ ] 输出失败案例索引。
 - [ ] 加入 random、lawnmower、Bayesian grid、no-radiation 和 oracle 对照。
@@ -327,7 +330,7 @@
 3. 完成 T0 detector sanity tests。
 4. 实现 T2 field mapping 和 GP baseline。
 5. 完善 T3 single/two-source localization。
-6. 增加 scenario generator 和 12 个场景。
+6. 场景库按业务领域扩展（新增领域、加大每档实例数、受控评测服务）。
 7. 增加 batch evaluator、统计汇总和 baseline report。
 8. 增加 no-radiation 与 oracle-field 对照。
 9. 在 Ubuntu/WSL2/Docker 中接入 OpenMC 校准案例。

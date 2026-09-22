@@ -1,0 +1,62 @@
+schema_version: '0.1'
+scenario_id: shielded_hiding_simple_002
+split: reference
+seed: 10059
+time_step_s: 0.25
+metadata:
+  domain: source_search
+  family: shielded_hiding
+  difficulty: simple
+  instance: 2
+  description: Locate sources hidden behind or inside shielding structures.
+  authoring_status: generated
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 12.0
+    y_min: 0.0
+    y_max: 8.0
+  obstacles:
+  - id: column_1
+    x_min: 4.0
+    x_max: 4.5
+    y_min: 2.0
+    y_max: 6.0
+    material: concrete
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.4
+  steel:
+    linear_attenuation_per_m: 1.2
+sources:
+- id: source_01
+  x: 3.5151232749755414
+  y: 6.873305783786485
+  reference_cps_at_1m: 220.0
+  isotope: synthetic_gamma
+detector:
+  integration_time_s: 0.5
+  background_cps: 3.0
+  efficiency: 0.9
+  max_cps: 5000.0
+  dead_time_s: 2.0e-05
+  min_distance_m: 0.25
+  directional_exponent: 0.0
+robot:
+  start:
+    x: 1.0
+    y: 1.0
+    yaw: 0.0
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+  pose_mode: noisy_odometry
+  odometry_noise:
+    translation_std_m: 0.01
+    rotation_std_rad: 0.01
+task:
+  type: source_localization
+  max_steps: 300
+  dose_budget: 950.0
+  localization_tolerance_m: 1.2

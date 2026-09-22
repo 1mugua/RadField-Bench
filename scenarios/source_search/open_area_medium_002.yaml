@@ -1,0 +1,80 @@
+schema_version: '0.1'
+scenario_id: open_area_medium_002
+split: reference
+seed: 10047
+time_step_s: 0.25
+metadata:
+  domain: source_search
+  family: open_area
+  difficulty: medium
+  instance: 2
+  description: Search an open yard for a lost source; recover and localize it.
+  authoring_status: generated
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 14.0
+    y_min: 0.0
+    y_max: 10.0
+  obstacles:
+  - id: crate_0
+    x_min: 7.805267875376645
+    x_max: 8.805267875376645
+    y_min: 1.9145217093787752
+    y_max: 2.7145217093787752
+    material: steel
+  - id: crate_1
+    x_min: 3.904793535968543
+    x_max: 4.904793535968543
+    y_min: 2.683270922923584
+    y_max: 3.483270922923584
+    material: steel
+  - id: crate_2
+    x_min: 3.6428200922950245
+    x_max: 4.6428200922950245
+    y_min: 5.720946900103617
+    y_max: 6.520946900103617
+    material: steel
+  - id: crate_3
+    x_min: 8.077297822860375
+    x_max: 9.077297822860375
+    y_min: 4.8700259162787916
+    y_max: 5.670025916278791
+    material: steel
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.4
+  steel:
+    linear_attenuation_per_m: 1.2
+sources:
+- id: source_01
+  x: 10.095405839732278
+  y: 4.957998476561536
+  reference_cps_at_1m: 90.0
+  isotope: synthetic_gamma
+detector:
+  integration_time_s: 0.5
+  background_cps: 6.0
+  efficiency: 0.9
+  max_cps: 5000.0
+  dead_time_s: 2.0e-05
+  min_distance_m: 0.25
+  directional_exponent: 0.0
+robot:
+  start:
+    x: 1.0
+    y: 1.0
+    yaw: 0.0
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+  pose_mode: noisy_odometry
+  odometry_noise:
+    translation_std_m: 0.02
+    rotation_std_rad: 0.02
+task:
+  type: source_localization
+  max_steps: 360
+  dose_budget: 900.0
+  localization_tolerance_m: 1.0

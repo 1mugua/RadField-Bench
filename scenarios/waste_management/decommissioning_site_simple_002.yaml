@@ -1,0 +1,87 @@
+schema_version: '0.1'
+scenario_id: decommissioning_site_simple_002
+split: reference
+seed: 10131
+time_step_s: 0.25
+metadata:
+  domain: waste_management
+  family: decommissioning_site
+  difficulty: simple
+  instance: 2
+  description: Survey a decommissioning site with scattered debris and residual hot
+    spots.
+  authoring_status: generated
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 16.0
+    y_min: 0.0
+    y_max: 10.0
+  obstacles:
+  - id: debris_0
+    x_min: 7.89766898638546
+    x_max: 9.180010623010414
+    y_min: 2.841811377646386
+    y_max: 4.227828307959893
+    material: concrete
+  - id: debris_1
+    x_min: 4.761623981690743
+    x_max: 5.754887976674222
+    y_min: 4.289621385948952
+    y_max: 5.529782944612377
+    material: concrete
+  - id: debris_2
+    x_min: 2.211015494530234
+    x_max: 3.7616513800574447
+    y_min: 7.305031730097654
+    y_max: 8.243601246189286
+    material: concrete
+  - id: debris_3
+    x_min: 10.589235663788738
+    x_max: 11.389814914775474
+    y_min: 1.8082350480228528
+    y_max: 2.4305740945106047
+    material: concrete
+  - id: debris_4
+    x_min: 12.188245541591904
+    x_max: 13.291356201616455
+    y_min: 6.541246805061093
+    y_max: 7.551830170587867
+    material: concrete
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.4
+  steel:
+    linear_attenuation_per_m: 1.2
+sources:
+- id: source_01
+  x: 4.111928462558561
+  y: 7.133846317033683
+  reference_cps_at_1m: 250.0
+  isotope: synthetic_gamma
+detector:
+  integration_time_s: 0.5
+  background_cps: 30.0
+  efficiency: 0.9
+  max_cps: 8000.0
+  dead_time_s: 2.0e-05
+  min_distance_m: 0.25
+  directional_exponent: 0.0
+robot:
+  start:
+    x: 1.0
+    y: 1.0
+    yaw: 0.0
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+  pose_mode: noisy_odometry
+  odometry_noise:
+    translation_std_m: 0.01
+    rotation_std_rad: 0.01
+task:
+  type: source_localization
+  max_steps: 340
+  dose_budget: 950.0
+  localization_tolerance_m: 1.2

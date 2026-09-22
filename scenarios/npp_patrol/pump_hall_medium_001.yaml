@@ -1,0 +1,102 @@
+schema_version: '0.1'
+scenario_id: pump_hall_medium_001
+split: reference
+seed: 10025
+time_step_s: 0.25
+metadata:
+  domain: npp_patrol
+  family: pump_hall
+  difficulty: medium
+  instance: 1
+  description: Bay-by-bay patrol of a pump hall; check equipment hot spots across
+    partitions.
+  authoring_status: generated
+world:
+  bounds:
+    x_min: 0.0
+    x_max: 10.0
+    y_min: 0.0
+    y_max: 8.0
+  obstacles:
+  - id: partition_1
+    x_min: 3.2
+    x_max: 3.6
+    y_min: 0.0
+    y_max: 3.0
+    material: concrete
+  - id: partition_1b
+    x_min: 3.2
+    x_max: 3.6
+    y_min: 5.0
+    y_max: 8.0
+    material: concrete
+  - id: partition_2
+    x_min: 6.8
+    x_max: 7.2
+    y_min: 0.0
+    y_max: 3.4
+    material: concrete
+  - id: partition_2b
+    x_min: 6.8
+    x_max: 7.2
+    y_min: 4.6
+    y_max: 8.0
+    material: concrete
+  - id: pump_0
+    x_min: 1.0
+    x_max: 2.2
+    y_min: 3.5
+    y_max: 4.5
+    material: steel
+  - id: pump_1
+    x_min: 4.6
+    x_max: 5.800000000000001
+    y_min: 3.5
+    y_max: 4.5
+    material: steel
+materials:
+  air:
+    linear_attenuation_per_m: 0.0
+  concrete:
+    linear_attenuation_per_m: 0.4
+  steel:
+    linear_attenuation_per_m: 1.2
+sources:
+- id: source_01
+  x: 5.9630493885082885
+  y: 6.915969954369336
+  reference_cps_at_1m: 140.0
+  isotope: synthetic_gamma
+- id: source_02
+  x: 7.367082928394662
+  y: 4.637837353650356
+  reference_cps_at_1m: 190.0
+  isotope: synthetic_gamma
+detector:
+  integration_time_s: 0.5
+  background_cps: 25.0
+  efficiency: 0.85
+  max_cps: 5000.0
+  dead_time_s: 2.0e-05
+  min_distance_m: 0.25
+  directional_exponent: 0.0
+robot:
+  start:
+    x: 1.0
+    y: 1.0
+    yaw: 0.0
+  max_linear_velocity_mps: 0.7
+  max_angular_velocity_rps: 1.0
+  pose_mode: noisy_odometry
+  odometry_noise:
+    translation_std_m: 0.02
+    rotation_std_rad: 0.02
+task:
+  type: safe_exploration
+  max_steps: 420
+  dose_budget: 800.0
+  goal:
+    x: 9.0
+    y: 7.0
+  goal_tolerance_m: 0.5
+  localization_tolerance_m: 1.0
